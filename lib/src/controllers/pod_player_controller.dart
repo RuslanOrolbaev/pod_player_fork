@@ -19,6 +19,7 @@ class PodPlayerController {
 
   final PlayVideoFrom playVideoFrom;
   final PodPlayerConfig podPlayerConfig;
+  bool _preInitDone = false;
 
   /// controller for pod player
   PodPlayerController({
@@ -36,13 +37,14 @@ class PodPlayerController {
         playVideoFrom: playVideoFrom,
         playerConfig: podPlayerConfig,
       );
+    _preInitDone = true;
   }
 
   /// Initializes the video player.
   ///
   /// If the provided video cannot be loaded, an exception could be thrown.
   Future<void> initialise() async {
-    if (!_isCtrInitialised) {
+    if (!_isCtrInitialised && !_preInitDone) {
       _init();
     }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
