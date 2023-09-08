@@ -36,6 +36,7 @@ class PodVideoPlayer extends StatefulWidget {
   final Widget? videoTitle;
   final Color? backgroundColor;
   final DecorationImage? videoThumbnail;
+  final bool showVideoTime;
 
   /// Optional callback, fired when full screen mode toggles.
   ///
@@ -59,6 +60,7 @@ class PodVideoPlayer extends StatefulWidget {
     this.videoTitle,
     this.matchVideoAspectRatioToFrame = false,
     this.matchFrameAspectRatioToVideo = false,
+    this.showVideoTime = true,
     this.onVideoError,
     this.backgroundColor,
     this.videoThumbnail,
@@ -82,6 +84,7 @@ class PodVideoPlayer extends StatefulWidget {
       ..videoTitle = videoTitle
       ..onToggleFullScreen = onToggleFullScreen
       ..onLoading = onLoading
+      ..showVideoTime = showVideoTime
       ..videoThumbnail = videoThumbnail;
   }
 

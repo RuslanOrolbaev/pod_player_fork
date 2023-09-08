@@ -203,22 +203,26 @@ class _MobileOverlayBottomControlles extends StatelessWidget {
                 tag: tag,
                 id: 'video-progress',
                 builder: (podCtr) {
-                  return Row(
-                    children: [
-                      Text(
-                        podCtr.calculateVideoDuration(podCtr.videoPosition),
-                        style: const TextStyle(color: itemColor),
-                      ),
-                      const Text(
-                        ' / ',
-                        style: durationTextStyle,
-                      ),
-                      Text(
-                        podCtr.calculateVideoDuration(podCtr.videoDuration),
-                        style: durationTextStyle,
-                      ),
-                    ],
-                  );
+                  return podCtr.showVideoTime
+                      ? Row(
+                          children: [
+                            Text(
+                              podCtr
+                                  .calculateVideoDuration(podCtr.videoPosition),
+                              style: const TextStyle(color: itemColor),
+                            ),
+                            const Text(
+                              ' / ',
+                              style: durationTextStyle,
+                            ),
+                            Text(
+                              podCtr
+                                  .calculateVideoDuration(podCtr.videoDuration),
+                              style: durationTextStyle,
+                            ),
+                          ],
+                        )
+                      : const SizedBox.shrink();
                 },
               ),
               const Spacer(),
