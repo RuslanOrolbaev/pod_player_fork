@@ -37,7 +37,10 @@ class PodGetXVideoController extends _PodGesturesController {
   Duration get videoPosition => _videoPosition;
 
   bool controllerInitialized = false;
+
+  /// custom here
   bool showVideoTime = true;
+  bool isMenuShown = true;
   late PodPlayerConfig podPlayerConfig;
   late PlayVideoFrom playVideoFrom;
   void config({

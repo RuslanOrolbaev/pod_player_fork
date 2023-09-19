@@ -52,7 +52,8 @@ class _VideoOverlays extends StatelessWidget {
             child: Stack(
               fit: StackFit.passthrough,
               children: [
-                if (!kIsWeb) _MobileOverlay(tag: tag),
+                if (!kIsWeb)
+                  _MobileOverlay(tag: tag, isMenuShown: podCtr.isMenuShown),
                 if (kIsWeb) _WebOverlay(tag: tag),
               ],
             ),

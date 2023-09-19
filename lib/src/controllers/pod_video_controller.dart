@@ -8,6 +8,8 @@ class _PodVideoController extends _PodUiController {
   bool isLooping = false;
   bool isFullScreen = false;
   bool isvideoPlaying = false;
+  Duration? startVideoAt;
+  Duration? stopVideoAt;
 
   List<String> videoPlaybackSpeeds = [
     '0.25x',
@@ -93,6 +95,13 @@ class _PodVideoController extends _PodUiController {
 
   ///toogle play pause
   void togglePlayPauseVideo() {
+    final moment = _videoPosition;
+    if ((moment < (startVideoAt ?? Duration.zero) ||
+            (stopVideoAt != null &&
+                moment.inSeconds >= stopVideoAt!.inSeconds)) &&
+        !isvideoPlaying) {
+      return;
+    }
     isvideoPlaying = !isvideoPlaying;
     podVideoStateChanger(
       isvideoPlaying ? PodVideoState.playing : PodVideoState.paused,

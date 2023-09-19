@@ -2,9 +2,11 @@ part of 'package:pod_player/src/pod_player.dart';
 
 class _MobileOverlay extends StatelessWidget {
   final String tag;
+  final bool isMenuShown;
 
   const _MobileOverlay({
     required this.tag,
+    this.isMenuShown = true,
   });
 
   @override
@@ -61,7 +63,7 @@ class _MobileOverlay extends StatelessWidget {
                   child: podCtr.videoTitle ?? const SizedBox(),
                 ),
               ),
-              MaterialIconButton(
+              if (isMenuShown) MaterialIconButton(
                 toolTipMesg: podCtr.podPlayerLabels.settings,
                 color: itemColor,
                 onPressed: () {

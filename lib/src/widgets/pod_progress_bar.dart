@@ -42,6 +42,19 @@ class _PodProgressBarState extends State<PodProgressBar> {
       final double relative = tapPos.dx / box.size.width;
       final Duration position =
           (videoPlayerValue?.duration ?? Duration.zero) * relative;
+
+      ///custom here
+      if ((_podCtr.startVideoAt != null || _podCtr.stopVideoAt != null) &&
+          videoPlayerValue?.duration != null) {
+        final relativeVideoDuration = _calcCurrentVideoLength(
+            videoLength: videoPlayerValue!.duration,
+            startAt: _podCtr.startVideoAt,
+            stopAt: _podCtr.stopVideoAt);
+        final newPosition = relativeVideoDuration * relative +
+            (_podCtr.startVideoAt ?? Duration.zero);
+        _podCtr.seekTo(newPosition);
+        return;
+      }
       _podCtr.seekTo(position);
     }
   }
@@ -129,6 +142,8 @@ class _PodProgressBarState extends State<PodProgressBar> {
                         ? widget.podProgressBarConfig.circleHandlerRadius
                         : 0,
                   ),
+                  videoStartAt: _podCtr.startVideoAt,
+                  videoStopAt: _podCtr.stopVideoAt,
                 ),
                 size: Size(
                   double.maxFinite,
@@ -144,10 +159,13 @@ class _PodProgressBarState extends State<PodProgressBar> {
 }
 
 class _ProgressBarPainter extends CustomPainter {
-  _ProgressBarPainter(this.value, {this.podProgressBarConfig});
+  _ProgressBarPainter(this.value,
+      {this.podProgressBarConfig, this.videoStartAt, this.videoStopAt});
 
   VideoPlayerValue value;
   PodProgressBarConfig? podProgressBarConfig;
+  Duration? videoStartAt;
+  Duration? videoStopAt;
 
   @override
   bool shouldRepaint(CustomPainter painter) {
@@ -185,14 +203,28 @@ class _ProgressBarPainter extends CustomPainter {
       return;
     }
 
+    final relativeVideoLength = _calcCurrentVideoLength(
+      videoLength: value.duration,
+      startAt: videoStartAt,
+      stopAt: videoStopAt,
+    );
+    final relativePosition =
+        _calcRelativePosition(value.position, videoStartAt).inMilliseconds;
+
     final double playedPartPercent =
-        value.position.inMilliseconds / value.duration.inMilliseconds;
+        relativePosition / relativeVideoLength.inMilliseconds;
+    // value.position.inMilliseconds / value.duration.inMilliseconds;
     final double playedPart =
         playedPartPercent > 1 ? width : playedPartPercent * width;
 
     for (final DurationRange range in value.buffered) {
       final double start = range.startFraction(value.duration) * width;
-      final double end = range.endFraction(value.duration) * width;
+      //final double end = range.endFraction(value.duration)* width;
+      final cachedDuration = range.end - range.start;
+      final double end = (cachedDuration.inMilliseconds -
+              (videoStartAt?.inMilliseconds ?? 0)) *
+          width /
+          relativeVideoLength.inMilliseconds;
 
       final Paint bufferedPaint = podProgressBarConfig!.getBufferedPaint != null
           ? podProgressBarConfig!.getBufferedPaint!(
@@ -255,4 +287,24 @@ class _ProgressBarPainter extends CustomPainter {
       handlePaint,
     );
   }
+}
+
+///custom here
+Duration _calcCurrentVideoLength({
+  required Duration videoLength,
+  Duration? startAt,
+  Duration? stopAt,
+}) {
+  final Duration startTime = startAt ?? Duration.zero;
+  late final Duration stopTime;
+  if (stopAt == null) {
+    stopTime = videoLength;
+  } else {
+    stopTime = stopAt;
+  }
+  return stopTime - startTime;
+}
+
+Duration _calcRelativePosition(Duration newPosition, Duration? startAt) {
+  return newPosition - (startAt ?? Duration.zero);
 }

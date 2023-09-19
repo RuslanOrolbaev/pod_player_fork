@@ -270,4 +270,13 @@ class PodPlayerController {
 
   /// Show overlay of video
   void showOverlay() => _ctr.isShowOverlay(true);
+
+  void setStartStopVideo(Duration? startAt, Duration? stopAt) {
+    if (_ctr.startVideoAt == startAt && _ctr.stopVideoAt == stopAt) {
+      return;
+    }
+    _ctr
+      ..startVideoAt = startAt
+      ..stopVideoAt = stopAt;
+  }
 }
