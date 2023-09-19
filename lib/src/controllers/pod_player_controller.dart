@@ -278,5 +278,14 @@ class PodPlayerController {
     _ctr
       ..startVideoAt = startAt
       ..stopVideoAt = stopAt;
+    if (_ctr.podVideoState == PodVideoState.paused) {
+      if (_ctr.videoPosition < (startAt ?? Duration.zero)) {
+        _ctr.seekTo(startAt ?? Duration.zero);
+      }
+      if (_ctr.videoPosition > (stopAt ?? _ctr.videoDuration)) {
+        _ctr.seekTo(stopAt ?? _ctr.videoDuration);
+      }
+      _ctr.update(['update-all']);
+    }
   }
 }
