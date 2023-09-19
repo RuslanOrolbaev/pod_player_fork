@@ -159,8 +159,12 @@ class _PodProgressBarState extends State<PodProgressBar> {
 }
 
 class _ProgressBarPainter extends CustomPainter {
-  _ProgressBarPainter(this.value,
-      {this.podProgressBarConfig, this.videoStartAt, this.videoStopAt});
+  _ProgressBarPainter(
+    this.value, {
+    this.podProgressBarConfig,
+    this.videoStartAt,
+    this.videoStopAt,
+  });
 
   VideoPlayerValue value;
   PodProgressBarConfig? podProgressBarConfig;
@@ -242,7 +246,7 @@ class _ProgressBarPainter extends CustomPainter {
         RRect.fromRectAndRadius(
           Rect.fromPoints(
             Offset(start, 0),
-            Offset(end, height),
+            Offset(end > width ? width : end, height),
           ),
           Radius.circular(curveRadius),
         ),

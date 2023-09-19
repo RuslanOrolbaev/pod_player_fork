@@ -285,7 +285,9 @@ class PodPlayerController {
       if (_ctr.videoPosition > (stopAt ?? _ctr.videoDuration)) {
         _ctr.seekTo(stopAt ?? _ctr.videoDuration);
       }
-      _ctr.update(['update-all']);
+      _ctr
+        ..update(['update-all'])
+        ..update(['video-progress']);
     }
   }
 }
