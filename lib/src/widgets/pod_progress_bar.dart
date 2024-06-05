@@ -241,15 +241,15 @@ class _ProgressBarPainter extends CustomPainter {
             )
           : Paint()
         ..color = podProgressBarConfig!.bufferedBarColor;
-
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromPoints(
-            Offset(start, 0),
-            Offset(end > width ? width : end, height),
-          ),
-          Radius.circular(curveRadius),
+      final rRect = RRect.fromRectAndRadius(
+        Rect.fromPoints(
+          Offset(start, 0),
+          Offset(end > width ? width : end, height),
         ),
+        Radius.circular(curveRadius),
+      );
+      canvas.drawRRect(
+        rRect,
         bufferedPaint,
       );
     }
