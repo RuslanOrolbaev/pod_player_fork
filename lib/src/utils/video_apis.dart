@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -125,8 +126,15 @@ class VideoApis {
           ),
         );
       } else {
-        final manifest =
-            await yt.videos.streamsClient.getManifest(youtubeIdOrUrl);
+        final manifest = await yt.videos.streams.getManifest(
+          youtubeIdOrUrl,
+          ytClients: [
+            if (Platform.isAndroid)
+              YoutubeApiClient.androidVr
+            else
+              YoutubeApiClient.ios,
+          ],
+        );
         urls.addAll(
           manifest.muxed.map(
             (element) => VideoQalityUrls(
